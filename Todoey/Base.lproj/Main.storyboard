@@ -33,7 +33,14 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Todoey" id="J5N-CO-WAU"/>
+                    <navigationItem key="navigationItem" title="Todoey" id="J5N-CO-WAU">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="qVC-8k-v2o">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="addButtonPressed:" destination="ux0-z4-pN1" id="A8p-I8-9Ly"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NGm-Ll-a6z" userLabel="First Responder" sceneMemberID="firstResponder"/>
