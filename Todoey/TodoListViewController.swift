@@ -11,8 +11,17 @@ import UIKit
 class TodoListViewController: UITableViewController {
     
     var itemArray = ["A","B","C"]
+    
+    //dùng userdefauft (1)
+    
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
+        
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        } //(1)
+        
         super.viewDidLoad()
     }
 
@@ -63,9 +72,11 @@ class TodoListViewController: UITableViewController {
         }
         
         let action = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
-            print(textFields.text)
             self.itemArray.append(textFields.text!)
             print(self.itemArray)
+            
+            self.defaults.set(self.itemArray, forKey: "TodoListArray") //(1)
+            
             //self.loadView() loadview cũng ok, nghiên cứu sau
             self.tableView.reloadData()
         }
