@@ -14,28 +14,35 @@ class TodoListViewController: UITableViewController {
     
     //dùng userdefauft (1)
     
-    let defaults = UserDefaults.standard
+    let defaults = UserDefaults.standard //(userdefaults)
+    
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Item.plist") //(encode)
 
     override func viewDidLoad() {
         
-        let newItem = Item()
-        newItem.tittle = "A"
-        itemArray.append(newItem)
         
-        let newItem2 = Item()
-        newItem2.tittle = "B"
-        itemArray.append(newItem2)
+        print(dataFilePath)
         
-        let newItem3 = Item()
-        newItem3.tittle = "C"
-        itemArray.append(newItem3)
+//        let newItem = Item()
+//        newItem.tittle = "A"
+//        itemArray.append(newItem)
+//
+//        let newItem2 = Item()
+//        newItem2.tittle = "B"
+//        itemArray.append(newItem2)
+//
+//        let newItem3 = Item()
+//        newItem3.tittle = "C"
+//        itemArray.append(newItem3)
+//
         
         
         
+//        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
+//            itemArray = items
+//        } //(1)
         
-        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
-            itemArray = items
-        } //(1)
+        loadItems()
         
         super.viewDidLoad()
     }
@@ -87,9 +94,9 @@ class TodoListViewController: UITableViewController {
 //        } else {
 //            itemArray[indexPath.row].done = false
 //        }
+        saveItems()
         
-        
-        tableView.reloadData()
+//        tableView.reloadData()
     }
     
     
@@ -111,10 +118,22 @@ class TodoListViewController: UITableViewController {
             addNewItem.tittle = textFields.text!
             self.itemArray.append(addNewItem)
             
-            self.defaults.set(self.itemArray, forKey: "TodoListArray") //(1)
+//            let encoder = PropertyListEncoder() //(2)
+//
+//            do {
+//                let data = try encoder.encode(self.itemArray)
+//                try data.write(to: self.dataFilePath!)
+//            } catch {
+//                print("Error")
+//            }
+            
+//            self.defaults.set(self.itemArray, forKey: "TodoListArray") //(1)
             
             //self.loadView() loadview cũng ok, nghiên cứu sau
-            self.tableView.reloadData()
+            
+//            self.tableView.reloadData()
+            
+            self.saveItems()
         }
         
         alert.addAction(action)
@@ -122,5 +141,31 @@ class TodoListViewController: UITableViewController {
         
     }
     
+    
+    //MARK - Model Manupulation Methods:
+    
+    func saveItems() {
+        let encoder = PropertyListEncoder() //(2)
+        
+        do {
+            let data = try encoder.encode(itemArray)
+            try data.write(to:dataFilePath!)
+        } catch {
+            print("Error")
+        }
+        tableView.reloadData()
+    }
+    
+    
+    func loadItems() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                itemArray = try decoder.decode([Item].self, from: data)
+            } catch{
+                print("Error decoding item data \(error)")
+            }
+        }
+    }
 }
 
